@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import DeleteTransactionButton from "./DeleteTransactionButton";
 import { SquarePen } from "lucide-react";
 import Link from "next/link";
@@ -17,14 +18,17 @@ type Props = {
 
 export default function TransactionItem({ transaction }: Props) {
   const isExpense = transaction.type === "EXPENSE";
+  const [showActions, setShowActions] = useState(false);
 
   return (
     <div
+      onClick={() => setShowActions((prev) => !prev)}
       className="
-        group flex items-center justify-between
+        flex items-center justify-between
         rounded-2xl bg-neutral-800/70
         border border-white/5
         px-5 py-4
+        cursor-pointer
         hover:bg-neutral-800
         hover:border-white/10
         transition-all
@@ -58,15 +62,21 @@ export default function TransactionItem({ transaction }: Props) {
       {/* Right */}
       <div className="flex items-center gap-4">
         <p
-          className={`text-sm font-semibold ${
-            isExpense ? "text-rose-400" : "text-emerald-400"
-          }`}
+          className={`text font-semibold ${isExpense ? "text-rose-400" : "text-emerald-400"
+            }`}
         >
           {isExpense ? "-" : "+"} {transaction.amount.toLocaleString()} ฿
         </p>
 
-        {/* Show delete on hover */}
-        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+        {/* Actions */}
+        <div
+          className={`
+            items-center gap-2
+            transition-all duration-200
+            ${showActions ? "flex opacity-100" : "hidden opacity-0 pointer-events-none"}
+          `}
+          onClick={(e) => e.stopPropagation()}
+        >
           {/* Edit */}
           <Link
             href={`/transactions/new/${transaction.id}/edit`}
@@ -79,6 +89,7 @@ export default function TransactionItem({ transaction }: Props) {
           {/* Delete */}
           <DeleteTransactionButton id={transaction.id} />
         </div>
+
       </div>
     </div>
   );
