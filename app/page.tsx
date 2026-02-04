@@ -1,6 +1,6 @@
 import SummaryCard from "@/components/SummaryCard";
-import TransactionList from "@/components/TransactionList";
-import { LayoutDashboard, PlusCircle } from "lucide-react";
+import OverviewChart from "@/components/OverviewChart";
+import { LayoutDashboard, ClipboardList } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
@@ -30,11 +30,11 @@ export default async function DashboardPage() {
 
           <Link
             href="/transactions/new"
-            className="flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-white font-medium
+            className="flex items-center gap-2 rounded-xl border border-emerald-600 px-4 py-2 text-white font-medium
                hover:bg-emerald-500 transition"
           >
-            <PlusCircle size={20} />
-            สร้างรายการใหม่
+            <ClipboardList size={20} />
+            รายการ
           </Link>
         </div>
 
@@ -45,7 +45,7 @@ export default async function DashboardPage() {
           <SummaryCard title="คงเหลือ" amount={balance} type="balance" />
         </div>
 
-        <TransactionList />
+        <OverviewChart />
       </div>
     </div>
   );

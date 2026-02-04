@@ -4,7 +4,7 @@ import TransactionItem from "./TransactionItem";
 
 export default async function TransactionList() {
   const transactions = await prisma.transaction.findMany({
-    orderBy: { transactionDate: "desc" },
+    orderBy: { id: "desc" },
     take: 10,
   });
 
@@ -15,6 +15,7 @@ export default async function TransactionList() {
     type: t.type,                     
     note: t.note,                     
     transactionDate: t.transactionDate.toISOString(),
+    createdAt: t.createdAt.toISOString(),
   }));
 
 

@@ -25,7 +25,7 @@ export default async function EditTransactionPage({ params }: Props) {
         <div className="max-w-xl mx-auto mt-10">
             <div className="flex items-center gap-4 mb-5">
                 <Link
-                    href="/"
+                    href="/transactions/new"
                     className="text-neutral-400 hover:text-white transition"
                 >
                     <ArrowLeft />
@@ -104,7 +104,7 @@ export default async function EditTransactionPage({ params }: Props) {
                 <div className="flex justify-end gap-3 pt-4">
                     <button
                         type="submit"
-                        className="rounded-lg bg-emerald-500 px-5 py-2 text-sm font-semibold text-black hover:bg-emerald-400"
+                        className="flex-1 rounded-xl bg-emerald-600 py-2 text-white font-medium hover:bg-emerald-500 transition cursor-pointer"
                     >
                         บันทึกการแก้ไข
                     </button>

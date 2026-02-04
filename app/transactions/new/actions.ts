@@ -2,7 +2,16 @@
 
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache"; // 👈 เพิ่มบรรทัดนี้
+import { revalidatePath } from "next/cache"; 
+
+function getThailandNow() {
+  const now = new Date();
+  const thailandOffset = 7 * 60;
+  const localOffset = now.getTimezoneOffset();
+  const diff = thailandOffset + localOffset;
+
+  return new Date(now.getTime() + diff * 60 * 1000);
+}
 
 export async function createTransaction(formData: FormData) {
   const title = formData.get("title") as string;
@@ -24,11 +33,12 @@ export async function createTransaction(formData: FormData) {
       type,
       transactionDate,
       note,
+      createdAt: getThailandNow(),
     },
   });
 
-  revalidatePath("/");
-  redirect("/");
+  revalidatePath("/transactions/new");
+  redirect("/transactions/new");
 }
 
 export async function updateTransaction(formData: FormData) {
@@ -49,11 +59,12 @@ export async function updateTransaction(formData: FormData) {
       type,
       transactionDate,
       note,
+      createdAt: getThailandNow(),
     },
   });
 
-  revalidatePath("/");
-  redirect("/");
+  revalidatePath("/transactions/new");
+  redirect("/transactions/new");
 }
 
 export async function deleteTransaction(formData: FormData) {
@@ -63,5 +74,5 @@ export async function deleteTransaction(formData: FormData) {
     where: { id },
   });
 
-  revalidatePath("/");
+  revalidatePath("/transactions/new");
 }

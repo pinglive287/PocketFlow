@@ -13,12 +13,29 @@ type Props = {
     type: "INCOME" | "EXPENSE";
     note: string | null;
     transactionDate: string;
+    createdAt: string;
   };
 };
 
 export default function TransactionItem({ transaction }: Props) {
   const isExpense = transaction.type === "EXPENSE";
   const [showActions, setShowActions] = useState(false);
+
+  const date = new Date(transaction.transactionDate);
+  const time = new Date(transaction.createdAt);
+
+  const formattedDate = date.toLocaleDateString("th-TH", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    timeZone: "Asia/Bangkok",
+  });
+
+  const formattedTime = new Date(time).toLocaleTimeString("th-TH", {
+    timeZone: "Asia/Bangkok",
+    hour: "2-digit",
+    minute: "2-digit",
+  })
 
   return (
     <div
@@ -48,7 +65,7 @@ export default function TransactionItem({ transaction }: Props) {
               text-neutral-300
             "
           >
-            {new Date(transaction.transactionDate).toLocaleDateString("th-TH")}
+            {formattedDate} เวลา {formattedTime} น.
           </span>
         </div>
 
