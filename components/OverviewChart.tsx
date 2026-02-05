@@ -55,10 +55,11 @@ export default function OverviewChart() {
     fetch(`/api/transactions?${params.toString()}`)
       .then(res => res.json())
       .then(raw => {
+         console.log(raw);
         setData(normalizeData(range, raw));
       });
   }, [range, selectedDate]);
-
+ 
   return (
     <div className="rounded-3xl bg-neutral-900 border border-neutral-800 p-6">
       {/* Header */}

@@ -18,7 +18,7 @@ model Transaction {
   amount          Decimal  @db.Decimal(10, 2)
   type            TransactionType
 
-  transactionDate DateTime @map("transaction_date")
+  transactionDate DateTime @default(now()) @map("transaction_date")
 
   note            String?
   createdAt       DateTime @default(now()) @map("created_at")

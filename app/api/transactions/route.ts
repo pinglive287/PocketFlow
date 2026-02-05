@@ -46,7 +46,7 @@ export async function GET(req: Request) {
   // ===============================
   const transactions = await prisma.transaction.findMany({
     where: {
-      createdAt: {
+      transactionDate: {
         gte: startDate,
         lte: endDate,
       },
@@ -54,7 +54,7 @@ export async function GET(req: Request) {
     select: {
       amount: true,
       type: true,
-      createdAt: true,
+      transactionDate: true,
     },
   });
 
@@ -73,7 +73,7 @@ export async function GET(req: Request) {
     let key: string | null = null;
 
     if (range === "day") {
-      const hour = dayjs(t.createdAt).hour();
+      const hour = dayjs(t.transactionDate).hour();
 
       // step ทุก 2 ชั่วโมง → 2,4,6,...,24
       const slot = Math.ceil(hour / 2) * 2;
@@ -81,7 +81,7 @@ export async function GET(req: Request) {
 
       key = `${slot.toString().padStart(2, "0")}:00`;
     } else {
-      const monthIndex = dayjs(t.createdAt).month(); 
+      const monthIndex = dayjs(t.transactionDate).month(); 
       key = labels[monthIndex];
     }
 

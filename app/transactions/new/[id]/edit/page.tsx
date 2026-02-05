@@ -86,7 +86,7 @@ export default async function EditTransactionPage({ params }: Props) {
                         defaultValue={transaction.transactionDate
                             .toISOString()
                             .split("T")[0]}
-                        className="w-full rounded-lg bg-neutral-900 px-3 py-2 text-white"
+                        className="w-full rounded-lg bg-neutral-900 px-3 py-2 text-white" readOnly
                     />
                 </div>
 

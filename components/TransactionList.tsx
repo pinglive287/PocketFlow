@@ -1,4 +1,3 @@
-// components/TransactionList.tsx (Server)
 import { prisma } from "@/lib/prisma";
 import TransactionItem from "./TransactionItem";
 

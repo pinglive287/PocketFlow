@@ -26,12 +26,14 @@ export async function createTransaction(formData: FormData) {
     throw new Error("ข้อมูลไม่ครบ");
   }
 
+  const now = new Date();
+
   await prisma.transaction.create({
     data: {
       title,
       amount,
       type,
-      transactionDate,
+      transactionDate: now,
       note,
       createdAt: getThailandNow(),
     },
@@ -57,7 +59,6 @@ export async function updateTransaction(formData: FormData) {
       title,
       amount,
       type,
-      transactionDate,
       note,
       createdAt: getThailandNow(),
     },
