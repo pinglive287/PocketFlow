@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
 import {
   ResponsiveContainer,
   BarChart,
@@ -19,12 +22,17 @@ const ranges = [
 export default function OverviewChart() {
   const [range, setRange] = useState<"day" | "month">("day");
   const [data, setData] = useState<any[]>([]);
+
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+
   const [selectedDate, setSelectedDate] = useState(
-    dayjs().format("YYYY-MM-DD")
+    dayjs().tz("Asia/Bangkok").format("YYYY-MM-DD")
   );
 
+
   const dayLabels = [
-    "02:00", "04:00", "06:00", "08:00", "10:00", "12:00", 
+    "02:00", "04:00", "06:00", "08:00", "10:00", "12:00",
     "14:00", "16:00", "18:00", "20:00", "22:00", "24:00",
   ];
 
@@ -33,7 +41,7 @@ export default function OverviewChart() {
     "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.",
   ];
 
-   function normalizeData(range: "day" | "month", raw: any[]) {
+  function normalizeData(range: "day" | "month", raw: any[]) {
     const labels = range === "day" ? dayLabels : monthLabels;
 
     return labels.map(label => {
@@ -55,11 +63,11 @@ export default function OverviewChart() {
     fetch(`/api/transactions?${params.toString()}`)
       .then(res => res.json())
       .then(raw => {
-         console.log(raw);
+        console.log(raw);
         setData(normalizeData(range, raw));
       });
   }, [range, selectedDate]);
- 
+
   return (
     <div className="rounded-3xl bg-neutral-900 border border-neutral-800 p-6">
       {/* Header */}

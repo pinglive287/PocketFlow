@@ -1,9 +1,14 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
+
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
 
   const range = (searchParams.get("range") || "month") as "day" | "month";
   const dateParam = searchParams.get("date"); // yyyy-mm-dd
@@ -20,12 +25,12 @@ export async function GET(req: Request) {
       ? dayjs(dateParam)
       : dayjs();
 
-    startDate = baseDate.startOf("day").toDate();
-    endDate = baseDate.endOf("day").toDate();
+    startDate = baseDate.tz("Asia/Bangkok").startOf("day").toDate();
+    endDate = baseDate.tz("Asia/Bangkok").endOf("day").toDate();
 
     labels = [
-      "02:00","04:00","06:00","08:00","10:00","12:00",
-      "14:00","16:00","18:00","20:00","22:00","24:00",
+      "02:00", "04:00", "06:00", "08:00", "10:00", "12:00",
+      "14:00", "16:00", "18:00", "20:00", "22:00", "24:00",
     ];
   } else {
     const baseDate = dateParam
@@ -36,8 +41,8 @@ export async function GET(req: Request) {
     endDate = baseDate.endOf("year").toDate();
 
     labels = [
-      "ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.",
-      "ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค.",
+      "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+      "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.",
     ];
   }
 
@@ -73,7 +78,9 @@ export async function GET(req: Request) {
     let key: string | null = null;
 
     if (range === "day") {
-      const hour = dayjs(t.transactionDate).hour();
+      const hour = dayjs(t.transactionDate)
+        .tz("Asia/Bangkok")
+        .hour();
 
       // step ทุก 2 ชั่วโมง → 2,4,6,...,24
       const slot = Math.ceil(hour / 2) * 2;
@@ -81,7 +88,7 @@ export async function GET(req: Request) {
 
       key = `${slot.toString().padStart(2, "0")}:00`;
     } else {
-      const monthIndex = dayjs(t.transactionDate).month(); 
+      const monthIndex = dayjs(t.transactionDate).month();
       key = labels[monthIndex];
     }
 

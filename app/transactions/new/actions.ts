@@ -49,9 +49,7 @@ export async function updateTransaction(formData: FormData) {
   const title = formData.get("title") as string;
   const amount = Number(formData.get("amount"));
   const type = formData.get("type") as "INCOME" | "EXPENSE";
-  const transactionDate = new Date(
-    formData.get("transactionDate") as string
-  );
+
   const note = formData.get("note") as string | null;
 
   await prisma.transaction.update({
