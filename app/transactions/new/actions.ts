@@ -39,7 +39,7 @@ export async function createTransaction(formData: FormData) {
     },
   });
 
-  revalidatePath("/transactions/new");
+  revalidatePath("/");
   redirect("/transactions/new");
 }
 
@@ -64,7 +64,7 @@ export async function updateTransaction(formData: FormData) {
     },
   });
 
-  revalidatePath("/transactions/new");
+  revalidatePath("/");
   redirect("/transactions/new");
 }
 
@@ -75,5 +75,5 @@ export async function deleteTransaction(formData: FormData) {
     where: { id },
   });
 
-  revalidatePath("/transactions/new");
+  revalidatePath("/");
 }
