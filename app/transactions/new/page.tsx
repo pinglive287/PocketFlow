@@ -2,7 +2,13 @@ import { ArrowLeft, ClipboardList, PlusCircle } from "lucide-react";
 import Link from "next/link";
 import TransactionList from "@/components/TransactionList";
 
-export default function NewTransactionPage() {
+export default async function NewTransactionPage({
+    searchParams,
+}: {
+    searchParams: { page?: string };
+}) {
+    const params = await searchParams;
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-neutral-950 to-neutral-900 p-8">
             <div className="max-w-6xl mx-auto space-y-8">
@@ -28,7 +34,10 @@ export default function NewTransactionPage() {
                     </Link>
                 </div>
 
-                <TransactionList />
+                <TransactionList
+                    searchParams={params}
+                    basePath="/transactions/new"
+                />
             </div>
         </div>
     );
