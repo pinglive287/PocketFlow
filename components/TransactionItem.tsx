@@ -22,6 +22,7 @@ export default function TransactionItem({ transaction }: Props) {
   const [showActions, setShowActions] = useState(false);
 
   const date = new Date(transaction.transactionDate);
+  const time = new Date(transaction.createdAt);
 
   const formattedDate = date.toLocaleDateString("th-TH", {
     day: "2-digit",
@@ -30,7 +31,7 @@ export default function TransactionItem({ transaction }: Props) {
     timeZone: "Asia/Bangkok",
   });
 
-  const formattedTime = new Date(date).toLocaleTimeString("th-TH", {
+  const formattedTime = new Date(time).toLocaleTimeString("th-TH", {
     timeZone: "Asia/Bangkok",
     hour: "2-digit",
     minute: "2-digit",

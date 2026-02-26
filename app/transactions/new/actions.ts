@@ -17,23 +17,25 @@ export async function createTransaction(formData: FormData) {
   const title = formData.get("title") as string;
   const amount = Number(formData.get("amount"));
   const type = formData.get("type") as "INCOME" | "EXPENSE";
-  const transactionDate = new Date(
-    formData.get("transactionDate") as string
-  );
+  const transactionDateStr = formData.get("transactionDate") as string;
   const note = formData.get("note") as string | null;
 
-  if (!amount || !type || !transactionDate) {
+  if (!amount || !type || !transactionDateStr) {
     throw new Error("ข้อมูลไม่ครบ");
   }
 
-  const now = new Date();
+  const transactionDate = new Date(transactionDateStr);
+
+  if (isNaN(transactionDate.getTime())) {
+    throw new Error("วันที่ไม่ถูกต้อง");
+  }
 
   await prisma.transaction.create({
     data: {
       title,
       amount,
       type,
-      transactionDate: now,
+      transactionDate,
       note,
       createdAt: getThailandNow(),
     },
@@ -49,9 +51,19 @@ export async function updateTransaction(formData: FormData) {
   const title = formData.get("title") as string;
   const amount = Number(formData.get("amount"));
   const type = formData.get("type") as "INCOME" | "EXPENSE";
-
   const note = formData.get("note") as string | null;
+  const transactionDateStr = formData.get("transactionDate") as string;
 
+  if (!id || !title || !amount || !type || !transactionDateStr) {
+    throw new Error("ข้อมูลไม่ครบ");
+  }
+
+  const transactionDate = new Date(transactionDateStr);
+
+  if (isNaN(transactionDate.getTime())) {
+    throw new Error("วันที่ไม่ถูกต้อง");
+  }
+  
   await prisma.transaction.update({
     where: { id },
     data: {
@@ -59,6 +71,7 @@ export async function updateTransaction(formData: FormData) {
       amount,
       type,
       note,
+      transactionDate,
       createdAt: getThailandNow(),
     },
   });

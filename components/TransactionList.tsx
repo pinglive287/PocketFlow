@@ -5,6 +5,7 @@ import Link from "next/link";
 interface Props {
   searchParams: {
     page?: string;
+    date?: string;
   };
   basePath: string;
 }
@@ -12,11 +13,32 @@ interface Props {
 export default async function TransactionList({ searchParams, basePath }: Props) {
   const page = Number(searchParams.page) || 1;
   const limit = 10;
+  const dateParam = searchParams.date as string | undefined;
 
-  const totalCount = await prisma.transaction.count();
+  // 👇 สร้าง where condition แบบ dynamic
+  let where: any = {};
+
+  if (dateParam) {
+    const start = new Date(dateParam);
+    const end = new Date(dateParam);
+
+    start.setHours(0, 0, 0, 0);
+    end.setHours(23, 59, 59, 999);
+
+    where.transactionDate = {
+      gte: start,
+      lte: end,
+    };
+  }
+
+  const totalCount = await prisma.transaction.count({ where });
 
   const transactions = await prisma.transaction.findMany({
-    orderBy: { id: "desc" },
+    where,
+    orderBy: [
+      { transactionDate: "desc" }, 
+      { id: "desc" },
+    ],
     take: limit,
     skip: (page - 1) * limit,
   });
@@ -35,6 +57,19 @@ export default async function TransactionList({ searchParams, basePath }: Props)
 
   return (
     <div className="space-y-4">
+      {/* 🔎 Search by date */}
+      <form method="GET" className="flex gap-2">
+        <input
+          type="date"
+          name="date"
+          defaultValue={dateParam}
+          className="px-5 py-2 bg-neutral-800 rounded-xl"
+        />
+        <button className="px-4 py-2 bg-sky-600 rounded-xl">
+          ค้นหา
+        </button>
+      </form>
+
       <div className="space-y-3">
         {safeTransactions.map((item) => (
           <TransactionItem key={item.id} transaction={item} />
@@ -45,7 +80,7 @@ export default async function TransactionList({ searchParams, basePath }: Props)
       <div className="flex gap-2 justify-center mt-4">
         {page > 1 && (
           <Link
-            href={`${basePath}?page=${page - 1}`}
+            href={`${basePath}?page=${page - 1}${dateParam ? `&date=${dateParam}` : ""}`}
             className="px-4 py-2 bg-neutral-800 rounded-xl"
           >
             Previous
@@ -58,7 +93,7 @@ export default async function TransactionList({ searchParams, basePath }: Props)
 
         {page < totalPages && (
           <Link
-            href={`${basePath}?page=${page + 1}`}
+            href={`${basePath}?page=${page + 1}${dateParam ? `&date=${dateParam}` : ""}`}
             className="px-4 py-2 bg-neutral-800 rounded-xl"
           >
             Next

@@ -63,6 +63,7 @@ export default function NewTransactionPage() {
                             name="title"
                             placeholder="เช่น เงินเดือน, ค่าอาหาร"
                             className="w-full rounded-xl bg-neutral-800 border border-neutral-700 px-4 py-2 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            required
                         />
                     </div>
 
@@ -77,6 +78,7 @@ export default function NewTransactionPage() {
                             step="0.01"
                             placeholder="0.00"
                             className="w-full rounded-xl bg-neutral-800 border border-neutral-700 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            required
                         />
                     </div>
 
@@ -91,6 +93,7 @@ export default function NewTransactionPage() {
                             value={date}
                             onChange={e => setDate(e.target.value)}
                             className="w-full rounded-xl bg-neutral-800 border border-neutral-700 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                            required
                         />
                     </div>
 
